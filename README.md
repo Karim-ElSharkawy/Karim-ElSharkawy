@@ -19,8 +19,8 @@ You can find it out the full list of my skills in my Resume in [LinkedIn](https:
 ---
 
 ### 🚀 **Highlighted Projects (That I am able to talk about)**
-- **[Instapay's Payment Gateway](#)** — The one and only payment gateway in Egypt, authored by the Central bank of Egypt. This has 12.5Million+ users and billions of transactions each year.
-- **[Real-Time Activity Planner](#)** — Backend for a social activities app with Firebase integration for real-time user interactions.  
+- **Instapay's Payment Gateway** — The one and only payment gateway in Egypt, authored by the Central bank of Egypt. This has 12.5Million+ users and billions of transactions each year.
+- **Real-Time Activity Planner** — Backend for a social activities app with Firebase integration for real-time user interactions.  
 
 ---
 
