@@ -14,34 +14,30 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fetch contributions from the GitHub API
+      - name: Fetch latest contribution date from the GitHub API
         run: |
           YEAR=$(date +'%Y')
           PREVIOUS_YEAR=$((YEAR - 1))
-          
+
           # GitHub API to get contributions (private and public)
           CONTRIBUTIONS_API_URL="https://api.github.com/users/${{ github.actor }}/events"
           RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" $CONTRIBUTIONS_API_URL)
           
-          # Count the number of contributions for the current year
-          CURRENT_COUNT=$(echo "$RESPONSE" | jq '[.[] | select(.created_at | startswith("'$(date +'%Y')'-"))] | length')
-          PREVIOUS_COUNT=$(echo "$RESPONSE" | jq '[.[] | select(.created_at | startswith("'$(date +'%Y' - 1)'-"))] | length')
-          
-          # Log the current contribution count
-          echo "Contributions for $YEAR: $CURRENT_COUNT"
-          echo "Contributions for $PREVIOUS_YEAR: $PREVIOUS_COUNT"
+          # Get the latest contribution date
+          LATEST_CONTRIBUTION_DATE=$(echo "$RESPONSE" | jq -r '.[0].created_at' | cut -d'T' -f1)
+
+          # Log the latest contribution date
+          echo "Latest contribution date: $LATEST_CONTRIBUTION_DATE"
 
           # Check if README.md contains a contributions section
-          CONTRIBUTIONS_SECTION="## Daily Contributions"
+          CONTRIBUTIONS_SECTION="## Contributions"
           
           # If the section exists, update; otherwise, create it
           if grep -q "$CONTRIBUTIONS_SECTION" README.md; then
-            sed -i "s/Contributions for the year $YEAR: .*/Contributions for the year $YEAR: $CURRENT_COUNT/" README.md
-            sed -i "s/Contributions for the previous year $PREVIOUS_YEAR: .*/Contributions for the previous year $PREVIOUS_YEAR: $PREVIOUS_COUNT/" README.md
+            sed -i "s/Latest contribution date: .*/Latest contribution date: $LATEST_CONTRIBUTION_DATE/" README.md
           else
             echo "$CONTRIBUTIONS_SECTION" >> README.md
-            echo "### Contributions for the year $YEAR: $CURRENT_COUNT" >> README.md
-            echo "### Contributions for the previous year $PREVIOUS_YEAR: $PREVIOUS_COUNT" >> README.md
+            echo "### Latest contribution date (automatic): $LATEST_CONTRIBUTION_DATE" >> README.md
           fi
 
       - name: Commit changes
@@ -65,5 +61,5 @@ jobs:
           commit-message: "Daily contribution update"
           branch: daily-contribution
           base: main
-          body: "This pull request was created automatically by a GitHub Actions workflow to update the contribution counts for the current and previous years."
+          body: "This pull request was created automatically by a GitHub Actions workflow to update the latest contribution date."
           token: ${{ secrets.PAT_TOKEN }}
