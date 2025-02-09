@@ -63,9 +63,3 @@ jobs:
           base: main
           body: "This pull request was created automatically by a GitHub Actions workflow to update the latest contribution date."
           token: ${{ secrets.PAT_TOKEN }}
-
-      - name: Delete branch after merge
-        if: github.event.pull_request.merged == true
-        uses: SvanBoxel/delete-merged-branch@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
