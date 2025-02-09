@@ -2,7 +2,7 @@ name: Daily Contributions
 
 on:
   schedule:
-    - cron: '0 0 * * 0-6'
+    - cron: '0 0 * * 0-6'  # Run daily, every day of the week
   workflow_dispatch:
 
 jobs:
@@ -14,29 +14,33 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Read and update README.md for contributions
+      - name: Fetch contributions from the GitHub API
         run: |
           YEAR=$(date +'%Y')
           PREVIOUS_YEAR=$((YEAR - 1))
+          
+          # GitHub API to get contributions (private and public)
+          CONTRIBUTIONS_API_URL="https://api.github.com/users/${{ github.actor }}/events"
+          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" $CONTRIBUTIONS_API_URL)
+          
+          # Count the number of contributions for the current year
+          CURRENT_COUNT=$(echo "$RESPONSE" | jq '[.[] | select(.created_at | startswith("'$(date +'%Y')'-"))] | length')
+          PREVIOUS_COUNT=$(echo "$RESPONSE" | jq '[.[] | select(.created_at | startswith("'$(date +'%Y' - 1)'-"))] | length')
+          
+          # Log the current contribution count
+          echo "Contributions for $YEAR: $CURRENT_COUNT"
+          echo "Contributions for $PREVIOUS_YEAR: $PREVIOUS_COUNT"
 
           # Check if README.md contains a contributions section
           CONTRIBUTIONS_SECTION="## Daily Contributions"
           
-          # Read the current contribution counts from the README.md (if any)
-          CURRENT_COUNT=$(grep -Po "(?<=Contributions for the year $YEAR: )\d+" README.md || echo "0")
-          PREVIOUS_COUNT=$(grep -Po "(?<=Contributions for the previous year $PREVIOUS_YEAR: )\d+" README.md || echo "0")
-
-          # Increment the current year's count
-          NEW_CURRENT_COUNT=$((CURRENT_COUNT + 1))
-          echo "Updated contribution count for $YEAR: $NEW_CURRENT_COUNT"
-          
-          # If the section doesn't exist, create it; otherwise, update the contribution counts
+          # If the section exists, update; otherwise, create it
           if grep -q "$CONTRIBUTIONS_SECTION" README.md; then
-            sed -i "s/Contributions for the year $YEAR: $CURRENT_COUNT/Contributions for the year $YEAR: $NEW_CURRENT_COUNT/" README.md
-            sed -i "s/Contributions for the previous year $PREVIOUS_YEAR: $PREVIOUS_COUNT/Contributions for the previous year $PREVIOUS_YEAR: $PREVIOUS_COUNT/" README.md
+            sed -i "s/Contributions for the year $YEAR: .*/Contributions for the year $YEAR: $CURRENT_COUNT/" README.md
+            sed -i "s/Contributions for the previous year $PREVIOUS_YEAR: .*/Contributions for the previous year $PREVIOUS_YEAR: $PREVIOUS_COUNT/" README.md
           else
             echo "$CONTRIBUTIONS_SECTION" >> README.md
-            echo "### Contributions for the year $YEAR: $NEW_CURRENT_COUNT" >> README.md
+            echo "### Contributions for the year $YEAR: $CURRENT_COUNT" >> README.md
             echo "### Contributions for the previous year $PREVIOUS_YEAR: $PREVIOUS_COUNT" >> README.md
           fi
 
