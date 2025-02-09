@@ -1,0 +1,64 @@
+name: Daily Contributions
+
+on:
+  schedule:
+    - cron: '0 0 * * 1-5'
+
+jobs:
+  make-contribution:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Read and update README.md for contributions
+        run: |
+          YEAR=$(date +'%Y')
+          PREVIOUS_YEAR=$((YEAR - 1))
+
+          # Check if README.md contains a contributions section
+          CONTRIBUTIONS_SECTION="## Daily Contributions"
+          
+          # Read the current contribution counts from the README.md (if any)
+          CURRENT_COUNT=$(grep -Po "(?<=Contributions for the year $YEAR: )\d+" README.md || echo "0")
+          PREVIOUS_COUNT=$(grep -Po "(?<=Contributions for the previous year $PREVIOUS_YEAR: )\d+" README.md || echo "0")
+
+          # Increment the current year's count
+          NEW_CURRENT_COUNT=$((CURRENT_COUNT + 1))
+          echo "Updated contribution count for $YEAR: $NEW_CURRENT_COUNT"
+          
+          # If the section doesn't exist, create it; otherwise, update the contribution counts
+          if grep -q "$CONTRIBUTIONS_SECTION" README.md; then
+            sed -i "s/Contributions for the year $YEAR: $CURRENT_COUNT/Contributions for the year $YEAR: $NEW_CURRENT_COUNT/" README.md
+            sed -i "s/Contributions for the previous year $PREVIOUS_YEAR: $PREVIOUS_COUNT/Contributions for the previous year $PREVIOUS_YEAR: $PREVIOUS_COUNT/" README.md
+          else
+            echo "$CONTRIBUTIONS_SECTION" >> README.md
+            echo "### Contributions for the year $YEAR: $NEW_CURRENT_COUNT" >> README.md
+            echo "### Contributions for the previous year $PREVIOUS_YEAR: $PREVIOUS_COUNT" >> README.md
+          fi
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: "GitHub Actions"
+          author_email: "actions@github.com"
+          message: "Daily contribution update"
+          add: "README.md"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: daily-contribution
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Open pull request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: "Daily Contribution Update"
+          commit-message: "Daily contribution update"
+          branch: daily-contribution
+          base: main
+          body: "This pull request was created automatically by a GitHub Actions workflow to update the contribution counts for the current and previous years."
+          token: ${{ secrets.GITHUB_TOKEN }}
