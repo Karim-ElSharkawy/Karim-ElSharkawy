@@ -27,3 +27,6 @@ You can find it out the full list of my skills in my Resume in [LinkedIn](https:
 ### 📬 **Connect with Me**
 - 🌐 [LinkedIn](https://www.linkedin.com/in/karim-elsharkawy/)  
 - 📧 [k_elsharkawy@hotmail.com](mailto:k_elsharkawy@hotmail.com)
+## Daily Contributions
+### Contributions for the year 2025: 1
+### Contributions for the previous year 2024: 0
