@@ -52,7 +52,7 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           branch: daily-contribution
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT_TOKEN }}
 
       - name: Open pull request
         uses: peter-evans/create-pull-request@v3
@@ -62,4 +62,4 @@ jobs:
           branch: daily-contribution
           base: main
           body: "This pull request was created automatically by a GitHub Actions workflow to update the contribution counts for the current and previous years."
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
