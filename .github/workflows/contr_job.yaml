@@ -2,8 +2,7 @@ name: Daily Contributions
 
 on:
   schedule:
-    - cron: '0 0 * * 0-6'  # Run daily, every day of the week
-  workflow_dispatch:
+    - cron: '0 8 * * *'  # Run daily
 
 jobs:
   make-contribution:
