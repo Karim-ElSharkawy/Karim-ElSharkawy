@@ -2,7 +2,8 @@ name: Daily Contributions
 
 on:
   schedule:
-    - cron: '0 8 * * *'  # Run daily
+    - cron: '0 8 * * *'  # Runs daily at 8 AM UTC
+  workflow_dispatch:
 
 jobs:
   make-contribution:
@@ -13,38 +14,37 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fetch latest contribution date from the GitHub API
+      - name: Update README with a random greeting
         run: |
-          YEAR=$(date +'%Y')
-          PREVIOUS_YEAR=$((YEAR - 1))
+          # Get today's day name
+          DAY_NAME=$(date +'%A')
 
-          # GitHub API to get contributions (private and public)
-          CONTRIBUTIONS_API_URL="https://api.github.com/users/${{ github.actor }}/events"
-          RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.PAT_TOKEN }}" $CONTRIBUTIONS_API_URL)
-          
-          # Get the latest contribution date
-          LATEST_CONTRIBUTION_DATE=$(echo "$RESPONSE" | jq -r '.[0].created_at' | cut -d'T' -f1)
+          # Define random greetings with H1 headers
+          GREETINGS=(
+            "# Hey there! It’s Karim Elsharkawy wishing you a fantastic $DAY_NAME! 🚀"
+            "# Good $DAY_NAME everyone! Karim Elsharkawy here – let’s make it awesome! 🎉"
+            "# Hi, I’m Karim Elsharkawy! Hope your $DAY_NAME is going great! 😊"
+            "# Happy $DAY_NAME! I’m Karim Elsharkawy, and I hope you have an amazing one! ☀️"
+            "# It’s a wonderful $DAY_NAME, and I, Karim Elsharkawy, am here to spread good vibes! 🧘"
+            "# Hello! I’m Karim Elsharkawy, checking in this fine $DAY_NAME! 💪"
+            "# Hey there, I’m Karim Elsharkawy! Wishing you a productive and happy $DAY_NAME! ✨"
+            "# What’s up? It’s $DAY_NAME, and I, Karim Elsharkawy, hope it’s treating you well! 🔥"
+            "# Good vibes from me, Karim Elsharkawy, on this beautiful $DAY_NAME! 🌟"
+            "# Hey folks, Karim Elsharkawy here! Hope your $DAY_NAME is off to a great start! 🚀"
+          )
 
-          # Log the latest contribution date
-          echo "Latest contribution date: $LATEST_CONTRIBUTION_DATE"
+          # Pick a random greeting
+          RANDOM_GREETING=${GREETINGS[$RANDOM % ${#GREETINGS[@]}]}
 
-          # Check if README.md contains a contributions section
-          CONTRIBUTIONS_SECTION="## Contributions"
-          
-          # If the section exists, update; otherwise, create it
-          if grep -q "$CONTRIBUTIONS_SECTION" README.md; then
-            sed -i "s/Latest contribution date: .*/Latest contribution date: $LATEST_CONTRIBUTION_DATE/" README.md
-          else
-            echo "$CONTRIBUTIONS_SECTION" >> README.md
-            echo "### Latest contribution date (automatic): $LATEST_CONTRIBUTION_DATE" >> README.md
-          fi
+          # Use sed to replace the text between <!-- GREETING START --> and <!-- GREETING END -->
+          sed -i "/<!-- GREETING START -->/,/<!-- GREETING END -->/c\<!-- GREETING START -->\n$RANDOM_GREETING\n<!-- GREETING END -->" README.md
 
       - name: Commit changes
         uses: EndBug/add-and-commit@v7
         with:
           author_name: "GitHub Actions"
           author_email: "actions@github.com"
-          message: "Daily contribution update"
+          message: "Updated daily greeting"
           add: "README.md"
 
       - name: Push changes
@@ -56,9 +56,15 @@ jobs:
       - name: Open pull request
         uses: peter-evans/create-pull-request@v3
         with:
-          title: "Daily Contribution Update"
-          commit-message: "Daily contribution update"
+          title: "Daily Greeting Update"
+          commit-message: "Updated daily greeting"
           branch: daily-contribution
           base: main
-          body: "This pull request was created automatically by a GitHub Actions workflow to update the latest contribution date."
+          body: "This pull request updates the greeting in the README with a new random greeting for today."
           token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Delete branch after merge
+        if: github.event.pull_request.merged == true
+        uses: SvanBoxel/delete-merged-branch@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}

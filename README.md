@@ -1,4 +1,7 @@
-# 👋 Hi, I'm Karim Elsharkawy!  
+<!-- GREETING START -->
+# Hey there! It’s Karim Elsharkawy wishing you a fantastic Monday! 🚀
+<!-- GREETING END -->
+
 🚀 **Backend Engineer | Microservices Enthusiast | Pro Gamer**  
 
 💡 Backend engineer with 5+ years of experience building reliable systems, improving performance, and providing monitoring and alerting to crucial systems. I've worked on many microservice architectures and I am currently working in Zalando!
@@ -27,5 +30,3 @@ You can find it out the full list of my skills in my Resume in [LinkedIn](https:
 ### 📬 **Connect with Me**
 - 🌐 [LinkedIn](https://www.linkedin.com/in/karim-elsharkawy/)  
 - 📧 [k_elsharkawy@hotmail.com](mailto:k_elsharkawy@hotmail.com)
-## Contributions
-### Latest contribution date (automatic): 2025-02-09
