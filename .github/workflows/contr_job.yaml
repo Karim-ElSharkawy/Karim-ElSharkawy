@@ -17,7 +17,7 @@ jobs:
       - name: Configure Git with Your Identity
         run: |
           git config --global user.name "Karim-ElSharkawy"
-          git config --global user.email "K_elsharkawy@hotmail.com"  # Replace with your GitHub email
+          git config --global user.email "K_elsharkawy@hotmail.com"
 
       - name: Update README with a random greeting
         run: |
@@ -49,7 +49,7 @@ jobs:
         with:
           author_name: "Karim-ElSharkawy"
           author_email: "K_elsharkawy@hotmail.com"
-          message: "Updated daily greeting"
+          message: "[Automatic]: Updated Greeting for the day"
           add: "README.md"
 
       - name: Push changes
@@ -62,7 +62,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           title: "Daily Greeting Update"
-          commit-message: "Updated daily greeting"
+          commit-message: "[Automatic]: Updated Greeting for the day"
           branch: daily-contribution
           base: main
           body: "This pull request updates the greeting in the README with a new random greeting for today."
