@@ -14,6 +14,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure Git with Your Identity
+        run: |
+          git config --global user.name "Karim-ElSharkawy"
+          git config --global user.email "K_elsharkawy@hotmail.com"  # Replace with your GitHub email
+
       - name: Update README with a random greeting
         run: |
           # Get today's day name
@@ -42,8 +47,8 @@ jobs:
       - name: Commit changes
         uses: EndBug/add-and-commit@v7
         with:
-          author_name: "GitHub Actions"
-          author_email: "actions@github.com"
+          author_name: "Karim-ElSharkawy"
+          author_email: "K_elsharkawy@hotmail.com"
           message: "Updated daily greeting"
           add: "README.md"
 
