@@ -1,5 +1,5 @@
 <!-- GREETING START -->
-# It’s a wonderful Sunday, and I, Karim Elsharkawy, am here to spread good vibes! 🧘
+# Hi, I’m Karim Elsharkawy! Hope your Monday is going great! 😊
 <!-- GREETING END -->
 
 🚀 **Backend Engineer | Microservices Enthusiast | Pro Gamer**  
