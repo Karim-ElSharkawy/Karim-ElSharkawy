@@ -1,5 +1,5 @@
 <!-- GREETING START -->
-# What’s up? It’s Tuesday, and I, Karim Elsharkawy, hope it’s treating you well! 🔥
+# Good vibes from me, Karim Elsharkawy, on this beautiful Wednesday! 🌟
 <!-- GREETING END -->
 
 🚀 **Backend Engineer | Microservices Enthusiast | Pro Gamer**  
