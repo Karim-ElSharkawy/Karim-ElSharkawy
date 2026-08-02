@@ -1,5 +1,5 @@
 <!-- GREETING START -->
-# Good Saturday everyone! Karim Elsharkawy here – let’s make it awesome! 🎉
+# Hi, I’m Karim Elsharkawy! Hope your Sunday is going great! 😊
 <!-- GREETING END -->
 
 🚀 **Backend Engineer | Microservices Enthusiast | Pro Gamer**  
